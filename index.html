@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHB Manufacturing Profit Calculator - Jen&J Metal Works</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .calculator-body {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+        
+        .input-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .input-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .input-item label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+        
+        .input-item input {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-item input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .results {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .results h2 {
+            margin-top: 0;
+            font-size: 2em;
+            text-align: center;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .result-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .result-item h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .result-item .value {
+            font-size: 2em;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .btn {
+            background: #3498db;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+        }
+        
+        @media (max-width: 768px) {
+            .input-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CHB Manufacturing Profit Calculator</h1>
+            <p>Plan Your Block Manufacturing Business Success</p>
+            <p><strong>Powered by Jen&J Metal Works</strong></p>
+        </div>
+        
+        <div class="calculator-body">
+            <div class="section">
+                <h2>📊 Production Details</h2>
+                <div class="input-group">
+                    <div class="input-item">
+                        <label>Blocks per Day (pcs)</label>
+                        <input type="number" id="blocksPerDay" value="1000" min="1" onchange="calculate()">
+                    </div>
+                    <div class="input-item">
+                        <label>Working Days per Month</label>
+                        <input type="number" id="workingDays" value="22" min="1" onchange="calculate()">
+                    </div>
+                    <div class="input-item">
+                        <label>Selling Price per Block (₱)</label>
+                        <input type="number" id="sellingPrice" value="12" min="1" step="0.5" onchange="calculate()">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>💰 Production Costs</h2>
+                <div class="input-group">
+                    <div class="input-item">
+                        <label>Cement per Block (₱)</label>
+                        <input type="number" id="cementCost" value="3.5" min="0" step="0.1" onchange="calculate()">
+                    </div>
+                    <div class="input-item">
+                        <label>Sand per Block (₱)</label>
+                        <input type="number" id="sandCost" value="1.8" min="0" step="0.1" onchange="calculate()">
+                    </div>
+                    <div class="input-item">
+                        <label>Gravel per Block (₱)</label>
+                        <input type="number" id="gravelCost" value="1.2" min="0" step="0.1" onchange="calculate()">
+                    </div>
+                    <div class="input-item">
+                        <label>Labor Cost per Day (₱)</label>
+                        <input type="number" id="laborCost" value="800" min="0" step="50" onchange="calculate()">
+                    </div>
+                    <div class="input-item">
+                        <label>Electricity per Day (₱)</label>
+                        <input type="number" id="electricityCost" value="300" min="0" step="50" onchange="calculate()">
+                    </div>
+                    <div class="input-item">
+                        <label>Other Expenses per Day (₱)</label>
+                        <input type="number" id="otherExpenses" value="200" min="0" step="50" onchange="calculate()">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>🏭 Equipment Investment</h2>
+                <div class="input-group">
+                    <div class="input-item">
+                        <label>Initial Equipment Cost (₱)</label>
+                        <input type="number" id="equipmentCost" value="110000" min="0" step="1000" onchange="calculate()">
+                    </div>
+                    <div class="input-item">
+                        <label>Monthly Equipment Depreciation (₱)</label>
+                        <input type="number" id="depreciation" value="1833" min="0" step="100" onchange="calculate()">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="results">
+                <h2>📈 Your Profit Projection</h2>
+                <div class="results-grid">
+                    <div class="result-item">
+                        <h3>Monthly Revenue</h3>
+                        <p class="value" id="monthlyRevenue">₱264,000</p>
+                    </div>
+                    <div class="result-item">
+                        <h3>Monthly Expenses</h3>
+                        <p class="value" id="monthlyExpenses">₱175,833</p>
+                    </div>
+                    <div class="result-item">
+                        <h3>Monthly Profit</h3>
+                        <p class="value" id="monthlyProfit">₱88,167</p>
+                    </div>
+                    <div class="result-item">
+                        <h3>Annual Profit</h3>
+                        <p class="value" id="annualProfit">₱1,058,000</p>
+                    </div>
+                    <div class="result-item">
+                        <h3>ROI Payback Period</h3>
+                        <p class="value" id="paybackPeriod">1.2 months</p>
+                    </div>
+                    <div class="result-item">
+                        <h3>Profit Margin</h3>
+                        <p class="value" id="profitMargin">33.4%</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="warning">
+                <strong>⚠️ Important Notes:</strong>
+                <ul>
+                    <li>These calculations are estimates based on your inputs</li>
+                    <li>Actual results may vary based on market conditions, location, and efficiency</li>
+                    <li>Consider additional costs like permits, insurance, and marketing</li>
+                    <li>Start with conservative estimates and adjust based on actual performance</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="window.print()">🖨️ Print Calculator</button>
+                <button class="btn" onclick="resetCalculator()" style="background: #e74c3c; margin-left: 10px;">🔄 Reset</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Ready to Start Your CHB Manufacturing Business?</strong></p>
+            <p>Contact Jen&J Metal Works for the Complete Construction Empire Starter Kit</p>
+            <p>📱 Message us for equipment pricing and business setup guidance</p>
+        </div>
+    </div>
+    
+    <script>
+        function calculate() {
+            // Get input values
+            const blocksPerDay = parseFloat(document.getElementById('blocksPerDay').value) || 0;
+            const workingDays = parseFloat(document.getElementById('workingDays').value) || 0;
+            const sellingPrice = parseFloat(document.getElementById('sellingPrice').value) || 0;
+            
+            const cementCost = parseFloat(document.getElementById('cementCost').value) || 0;
+            const sandCost = parseFloat(document.getElementById('sandCost').value) || 0;
+            const gravelCost = parseFloat(document.getElementById('gravelCost').value) || 0;
+            const laborCost = parseFloat(document.getElementById('laborCost').value) || 0;
+            const electricityCost = parseFloat(document.getElementById('electricityCost').value) || 0;
+            const otherExpenses = parseFloat(document.getElementById('otherExpenses').value) || 0;
+            
+            const equipmentCost = parseFloat(document.getElementById('equipmentCost').value) || 0;
+            const depreciation = parseFloat(document.getElementById('depreciation').value) || 0;
+            
+            // Calculate monthly production
+            const monthlyBlocks = blocksPerDay * workingDays;
+            
+            // Calculate monthly revenue
+            const monthlyRevenue = monthlyBlocks * sellingPrice;
+            
+            // Calculate monthly material costs
+            const monthlyMaterialCosts = monthlyBlocks * (cementCost + sandCost + gravelCost);
+            
+            // Calculate monthly operational costs
+            const monthlyOperationalCosts = (laborCost + electricityCost + otherExpenses) * workingDays;
+            
+            // Calculate total monthly expenses
+            const monthlyExpenses = monthlyMaterialCosts + monthlyOperationalCosts + depreciation;
+            
+            // Calculate monthly profit
+            const monthlyProfit = monthlyRevenue - monthlyExpenses;
+            
+            // Calculate annual profit
+            const annualProfit = monthlyProfit * 12;
+            
+            // Calculate payback period
+            const paybackPeriod = equipmentCost / monthlyProfit;
+            
+            // Calculate profit margin
+            const profitMargin = (monthlyProfit / monthlyRevenue) * 100;
+            
+            // Update display
+            document.getElementById('monthlyRevenue').textContent = `₱${monthlyRevenue.toLocaleString()}`;
+            document.getElementById('monthlyExpenses').textContent = `₱${monthlyExpenses.toLocaleString()}`;
+            document.getElementById('monthlyProfit').textContent = `₱${monthlyProfit.toLocaleString()}`;
+            document.getElementById('annualProfit').textContent = `₱${annualProfit.toLocaleString()}`;
+            document.getElementById('paybackPeriod').textContent = `${paybackPeriod.toFixed(1)} months`;
+            document.getElementById('profitMargin').textContent = `${profitMargin.toFixed(1)}%`;
+        }
+        
+        function resetCalculator() {
+            document.getElementById('blocksPerDay').value = 1000;
+            document.getElementById('workingDays').value = 22;
+            document.getElementById('sellingPrice').value = 12;
+            document.getElementById('cementCost').value = 3.5;
+            document.getElementById('sandCost').value = 1.8;
+            document.getElementById('gravelCost').value = 1.2;
+            document.getElementById('laborCost').value = 800;
+            document.getElementById('electricityCost').value = 300;
+            document.getElementById('otherExpenses').value = 200;
+            document.getElementById('equipmentCost').value = 110000;
+            document.getElementById('depreciation').value = 1833;
+            calculate();
+        }
+        
+        // Initialize calculator
+        calculate();
+    </script>
+</body>
+</html>
